@@ -1,24 +1,40 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teste</title>
-</head>
-<body>
+{% extends 'layout.html' %}
 
-<h1>hello world!</h1>
+{% block content %}
 
 <p>Hello <b>{{ name }}</b></p>
 
-<form action="store/" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="text" name="prompt" placeholder="prompt" required>
-    <br>
-    <label for="file">Vídeo:</label>
-    <input type="file" name="file" id="file" accept="video/*" required>
-    <button type="submit">Enviar</button>
-</form>
+{% if ai_response %}
+    <div class="container">
+        <form action="{% url 'store' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="prompt">Prompt:</label>
+            <input type="text" name="prompt" placeholder="O que há de errado neste vídeo?" id="prompt" required>
+        
+            <label for="file">Vídeo:</label>
+            <input type="file" name="file" id="file" accept="video/*" required>
+            <button type="submit">Enviar</button>
+        </form>
+        <aside>
+            <h2>Resposta do Gemini:</h2>
+            <p>{{ ai_response|safe }}</p>
+            <form action="{% url 'download' %}" method="post">
+                {% csrf_token %}
+                <input type="text" name="ai_response" value="{{ ai_response }}" hidden>
+                <button type="submit">Download</button>
+            </form>
+        </aside>
+    </div>
+{% else %}
+    <form action="store/" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="prompt">Prompt:</label>
+        <input type="text" name="prompt" placeholder="O que há de errado neste vídeo?" id="prompt" required>
 
-</body>
-</html>
+        <label for="file">Vídeo:</label>
+        <input type="file" name="file" id="file" accept="video/*" required>
+        <button type="submit">Enviar</button>
+    </form>
+{% endif %}
+
+{% endblock %}

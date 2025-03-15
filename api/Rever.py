@@ -38,7 +38,7 @@ O objetivo é de analisar vídeos de operação e manutenção em plataformas de
 3. Estabeleça critérios de identificação de interações inseguras, como proximidade com partes móveis, quinas vivas, ausência de barreiras físicas, negligência em lockout/tagout e trabalho em altura sem proteção.
 4. Delineie o fluxo de trabalho: coleta de vídeo, análise em tempo real, geração de alertas e relatórios, integração com sistemas de gestão (BI) e re-treinamento contínuo do modelo.
 5. Crie um output estruturado que liste: tipo de não conformidade, referência à norma aplicável, grau de risco e recomendação de ação imediata.
-6. Responda usando PlainText. Não use listas em excesso ou Markdown.
+6. SEMPRE RESPONDA COM MARKDOWN. Use # para Títulos, * para itálico e negrito, - para listas, etc.
 
 Analisamos as atividades através dos riscos envolvidos, principalmente, riscos ocupacionais. Cito como exemplo: Riscos químicos, biológicos, físicos, ergonômicos e de acidentes ou mecânico.
 Para os riscos relacionados aos acidentes, podem ocorrer:
@@ -53,6 +53,8 @@ Gerar um relatório detalhado agindo como se fosse o resultado de uma análise f
 O relatório deve conter os seguintes campos: tipo de tarefa/nome do operador de análise [* esse campo deve ser preenchido na página *]/data/tempo analisado/objetivo/não conformidades encontradas/potenciais não conformidades/boas práticas de trabalho seguro identificadas/conclusão.
 
 Para cada observação reportada, informar o quadrante do vídeo e o tempo de início e fim da observação.
+
+Responda TODAS AS PERGUNTAS usando MARKDOWN, conforme descrito na regra 6. 
 '''
         client = genai.Client(api_key=api_key or os.getenv('GEMINI_API_KEY'))
         file = client.files.upload(file=file_path)

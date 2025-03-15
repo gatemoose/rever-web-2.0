@@ -12,7 +12,7 @@ class Request(models.Model):
     def __str__(self):
         return self.prompt
     
-# CLASSE :: RESPOSTA
+
 class Response(models.Model):
     prompt = models.ForeignKey(Request, on_delete=models.CASCADE,
                                related_name='responses', verbose_name='Prompt')

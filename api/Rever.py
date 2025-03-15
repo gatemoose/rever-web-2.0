@@ -6,11 +6,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Rever:
-    def compress(self, input_path: str, output_path: str, crf: int = 23, preset: str = 'fast') -> str:
+    def compress(self, input_path: str, output_path: str, crf: int = 23, preset: str = 'fast', scale: str = 'scale=720:480', audio_bitrate: str = '96k') -> str:
         command: list[str] = [
             'ffmpeg',
             '-i', str(input_path),
             '-crf', str(crf),
+            '-vf', str(scale),
+            '-b:a', str(audio_bitrate),
             '-preset', str(preset),
             output_path, '-y'
         ]
@@ -24,7 +26,7 @@ class Rever:
         self,
         file_path: str,
         prompt: str,
-        model_name: str = 'gemini-2.0-flash',
+        model_name: str = 'gemini-2.0-pro-exp-02-05',
         temperature: float = 1.0,
         api_key:str = str(os.getenv('GEMINI_API_KEY')),
     ):
@@ -38,7 +40,7 @@ O objetivo é de analisar vídeos de operação e manutenção em plataformas de
 3. Estabeleça critérios de identificação de interações inseguras, como proximidade com partes móveis, quinas vivas, ausência de barreiras físicas, negligência em lockout/tagout e trabalho em altura sem proteção.
 4. Delineie o fluxo de trabalho: coleta de vídeo, análise em tempo real, geração de alertas e relatórios, integração com sistemas de gestão (BI) e re-treinamento contínuo do modelo.
 5. Crie um output estruturado que liste: tipo de não conformidade, referência à norma aplicável, grau de risco e recomendação de ação imediata.
-6. SEMPRE RESPONDA COM MARKDOWN. Use # para Títulos, * para itálico e negrito, - para listas, etc.
+6. SEMPRE RESPONDA COM MARKDOWN. Use # para Títulos, * para itálico e negrito, - para listas, etc. Contudo, NÃO TENTE CRIAR TABELAS EM MARKDOWN.
 
 Analisamos as atividades através dos riscos envolvidos, principalmente, riscos ocupacionais. Cito como exemplo: Riscos químicos, biológicos, físicos, ergonômicos e de acidentes ou mecânico.
 Para os riscos relacionados aos acidentes, podem ocorrer:
@@ -54,7 +56,7 @@ O relatório deve conter os seguintes campos: tipo de tarefa/nome do operador de
 
 Para cada observação reportada, informar o quadrante do vídeo e o tempo de início e fim da observação.
 
-Responda TODAS AS PERGUNTAS usando MARKDOWN, conforme descrito na regra 6. 
+Responda TODAS AS PERGUNTAS usando MARKDOWN, conforme descrito na regra 6. LEMBRE DE NÃO CRIAR TABELAS EM MARKDOWN.
 '''
         client = genai.Client(api_key=api_key or os.getenv('GEMINI_API_KEY'))
         file = client.files.upload(file=file_path)

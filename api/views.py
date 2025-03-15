@@ -22,7 +22,7 @@ def store(request):
         output_path = str(os.getenv('PWD')) + '/api/files/COMPRESSED-' + filename
 
         rever = Rever()
-        compress_ok = rever.compress(input_path, output_path)
+        compress_ok = rever.compress(input_path, output_path, crf=28)
 
         response_ok = markdown.markdown(rever.analyze(output_path, prompt=prompt))
 

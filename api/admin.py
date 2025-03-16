@@ -9,7 +9,7 @@ class RequestAdmin(admin.ModelAdmin):
 
 @admin.register(Response)
 class ResponseAdmin(admin.ModelAdmin):
-    list_display = ['ai_response', 'prompt__prompt', 'tokens_used', 'created_at']
-    search_fields = ['ai_response', 'prompt__prompt']
+    list_display = ['ai_response_html', 'prompt__prompt', 'tokens_used', 'created_at']
+    search_fields = ['ai_response_html', 'prompt__prompt']
     list_filter = ['created_at']
-
+    readonly_fields = ['ai_response_html']

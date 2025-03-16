@@ -1,4 +1,4 @@
-api/files/*.mp4
+api/files/*
 .env
-api/__pycache__/
+*/__pycache__/
 db.sqlite3

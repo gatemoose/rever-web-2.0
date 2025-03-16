@@ -58,10 +58,11 @@ Para cada observação reportada, informar o quadrante do vídeo e o tempo de in
 
 Responda TODAS AS PERGUNTAS usando MARKDOWN, conforme descrito na regra 6. LEMBRE DE NÃO CRIAR TABELAS EM MARKDOWN.
 '''
-        client = genai.Client(api_key=api_key or os.getenv('GEMINI_API_KEY'))
+        client = genai.Client(api_key=api_key)
         file = client.files.upload(file=file_path)
 
         while file.state.name == 'PROCESSING':
+            print('Processing file...') # Debug
             file = client.files.get(name=file.name)
         
         if file.state.name == 'FAILED': return f'Erro ao enviar para o Gemini: {file.state.name}'

@@ -5,10 +5,10 @@ import os
 from .Rever import Rever
 import markdown
 from weasyprint import HTML
-# from io import BytesIO
+from .models import Request, Response
 
 def index(request):
-    return render(request, 'index.html', {'name' : 'John Doe'})
+    return render(request, 'index.html')
 
 def store(request):
     if request.method == 'POST':
@@ -23,10 +23,14 @@ def store(request):
 
         rever = Rever()
         compress_ok = rever.compress(input_path, output_path, crf=28)
-
         response_ok = markdown.markdown(rever.analyze(output_path, prompt=prompt))
 
         os.remove(input_path)
+
+        request_value = Request(prompt=prompt, file=f'/api/filesCOMPRESSED-{filename}')
+        response_value = Response(prompt=request_value, ai_response=response_ok, tokens_used=0)
+        request_value.save()
+        response_value.save()
 
         context = {
             'compression': compress_ok,

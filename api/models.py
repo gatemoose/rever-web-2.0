@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.html import format_html
 
 class Request(models.Model):
     prompt = models.TextField(verbose_name='Prompt')
@@ -8,6 +9,7 @@ class Request(models.Model):
     class Meta:
         ordering = ['prompt']
         verbose_name = 'Requisição'
+        verbose_name_plural = 'Requisições'
 
     def __str__(self):
         return self.prompt
@@ -26,3 +28,9 @@ class Response(models.Model):
 
     def __str__(self):
         return self.ai_response
+    
+    def ai_response_html(self):
+        return format_html(self.ai_response)
+    
+    ai_response_html.short_description = 'Resposta do Gemini'
+    

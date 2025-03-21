@@ -76,6 +76,6 @@ Responda TODAS AS PERGUNTAS usando MARKDOWN, conforme descrito na regra 6. LEMBR
                 ),
                 contents=[file, prompt]
             )
-            return response.text
+            return [response.text, response.usage_metadata.total_token_count]
         except Exception as e:
             return f'Erro ao gerar conteúdo do Gemini: {e}'

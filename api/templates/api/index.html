@@ -1,0 +1,251 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safe Vision</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-800 to-blue-600 text-white px-6 flex justify-between items-center shadow-lg">
+        <div class="flex items-center">
+            <img class="pt-3" src="{% static 'api/logo-safe-vision-no-text-remade.png' %}" alt="Logo" width="140px" height="90px">
+            <p class="font-bold text-white text-3xl">SAFE VISION</p>
+        </div>
+        <a href="#" class="hover:text-blue-200 transition-colors font-medium">Ajuda</a>
+    </header>
+
+    <!-- TOAST NOTIFICATION -->
+
+    {% if ai_response %}
+
+   
+    
+    {% endif %}
+
+
+
+
+    {% if not ai_response %}
+    <form action="{% url 'run' %}" method="post" enctype="multipart/form-data">
+    {% else %}
+    <form action="{% url 'download' %}" method="post">
+    {% endif %}
+
+    {% csrf_token %}
+
+    <main class="container mx-auto px-6 py-8 mt-5">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-24"> <!-- Aumentado espaço inferior -->
+            <!-- Seção Esquerda - Formulário -->
+            <div class="bg-white p-8 rounded-xl shadow-md border border-gray-100">
+                <div class="space-y-8">
+                    <div>
+                        <label class="block text-blue-800 text-lg font-semibold mb-3">Prompt de Segurança</label>
+                        <textarea name="prompt"
+                            class="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all"
+                            rows="5"
+                            placeholder="Descreva sua análise de risco..."></textarea>
+                    </div>
+                    <div class="relative">
+                        <!-- Área de Upload (visível inicialmente) -->
+                        <div id="uploadArea" class="group">
+                            <label class="block text-blue-800 text-lg font-semibold mb-3">Upload de Vídeo</label>
+                            <input name="file" type="file" id="videoInput" class="opacity-0 absolute w-full h-full cursor-pointer" accept="video/mp4,video/x-m4v,video/*">
+                            <div class="p-6 border-2 border-dashed border-gray-300 rounded-xl bg-white group-hover:border-blue-500 transition-colors text-center">
+                                <svg class="w-12 h-12 mx-auto text-blue-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                </svg>
+                                <p class="text-gray-600">Arraste ou clique para enviar</p>
+                                <p class="text-sm text-gray-400 mt-1">Formatos suportados: MP4, MOV, AVI</p>
+                            </div>
+                        </div>
+                    
+                        <!-- Informações do Arquivo (oculto inicialmente) -->
+                        <div id="fileInfo" class="hidden p-6 bg-white border-2 border-blue-200 rounded-xl shadow-sm">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                                    </svg>
+                                    <h3 class="text-lg font-medium text-blue-800">Vídeo Carregado</h3>
+                                </div>
+                                <button type="button" onclick="clearFile()" class="text-gray-400 hover:text-red-500 transition-colors">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <div class="space-y-2 text-sm text-gray-600">
+                                <p><span class="font-medium">Nome:</span> <span id="fileName" class="ml-2">-</span></p>
+                                <p><span class="font-medium">Tamanho:</span> <span id="fileSize" class="ml-2">-</span></p>
+                                <p><span class="font-medium">Formato:</span> <span id="fileType" class="ml-2">-</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Direita - Informações -->
+            <div class="bg-white p-8 rounded-xl shadow-md border border-gray-100">
+                <div class="space-y-8">
+                    <h2 class="text-2xl font-bold text-blue-800 mb-4">Proteção Inteligente para Ambientes de Trabalho</h2>
+                    <p class="text-gray-700 leading-relaxed text-lg">
+                        Garanta a conformidade e tenha rastreabilidade completa com nossa tecnologia. Após a análise inteligente de equipamentos, EPIs e condições ambientais, nossa plataforma gera relatórios precisos e auditáveis. Esses documentos facilitam a comprovação do cumprimento das normas de segurança e auxiliam em auditorias.
+                    </p>
+                    
+                    <!-- Pictogramas -->
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+                        <div class="cursor-pointer p-4 bg-blue-50 rounded-xl text-center hover:bg-blue-100 transition-colors">
+                            <svg class="w-12 h-12 mx-auto text-blue-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                            </svg>
+                            <span class="text-sm font-medium text-gray-700">Detecção de EPIs</span>
+                        </div>
+                        <div class="cursor-pointer p-4 bg-blue-50 rounded-xl text-center hover:bg-blue-100 transition-colors">
+                            <svg class="w-12 h-12 mx-auto text-blue-600 mb-2" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2L3 9v12h18V9l-9-7zm0 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+                                <path d="M0 0h24v24H0z" fill="none"/>
+                            </svg>
+                            <span class="text-sm font-medium text-gray-700">Zoneamento</span>
+                        </div>
+                        <div class="cursor-pointer p-4 bg-blue-50 rounded-xl text-center hover:bg-blue-100 transition-colors">
+                            <svg class="w-12 h-12 mx-auto text-blue-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                            <span class="text-sm font-medium text-gray-700">Evite riscos</span>
+                        </div>
+                        <div class="cursor-pointer p-4 bg-blue-50 rounded-xl text-center hover:bg-blue-100 transition-colors">
+                            <svg class="w-12 h-12 mx-auto text-blue-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                            <span class="text-sm font-medium text-gray-700">Controle de Acesso</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if not ai_response %}
+            <!-- Elementos Inferiores -->
+            <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-4 px-6 flex justify-between shadow-lg">
+                <div class="flex items-center space-x-4 cursor-pointer">
+                    <div 
+    x-data="{
+        tooltipVisible: false,
+        tooltipText: 'Usando {{ model_name }}',
+        tooltipArrow: true,
+        tooltipPosition: 'top',
+    }"
+    x-init="$refs.content.addEventListener('mouseenter', () => { tooltipVisible = true; }); $refs.content.addEventListener('mouseleave', () => { tooltipVisible = false; });"
+    class="relative">
+    
+    <div x-ref="tooltip" x-show="tooltipVisible" :class="{ 'top-0 left-1/2 -translate-x-1/2 -mt-0.5 -translate-y-full' : tooltipPosition == 'top', 'top-1/2 -translate-y-1/2 -ml-0.5 left-0 -translate-x-full' : tooltipPosition == 'left', 'bottom-0 left-1/2 -translate-x-1/2 -mb-0.5 translate-y-full' : tooltipPosition == 'bottom', 'top-1/2 -translate-y-1/2 -mr-0.5 right-0 translate-x-full' : tooltipPosition == 'right' }" class="absolute w-auto text-sm" x-cloak>
+        <div x-show="tooltipVisible" x-transition class="relative px-2 py-1 text-white bg-black rounded bg-opacity-90">
+            <p x-text="tooltipText" class="flex-shrink-0 block text-xs whitespace-nowrap"></p>
+            <div x-ref="tooltipArrow" x-show="tooltipArrow" :class="{ 'bottom-0 -translate-x-1/2 left-1/2 w-2.5 translate-y-full' : tooltipPosition == 'top', 'right-0 -translate-y-1/2 top-1/2 h-2.5 -mt-px translate-x-full' : tooltipPosition == 'left', 'top-0 -translate-x-1/2 left-1/2 w-2.5 -translate-y-full' : tooltipPosition == 'bottom', 'left-0 -translate-y-1/2 top-1/2 h-2.5 -mt-px -translate-x-full' : tooltipPosition == 'right' }" class="absolute inline-flex items-center justify-center overflow-hidden">
+                <div :class="{ 'origin-top-left -rotate-45' : tooltipPosition == 'top', 'origin-top-left rotate-45' : tooltipPosition == 'left', 'origin-bottom-left rotate-45' : tooltipPosition == 'bottom', 'origin-top-right -rotate-45' : tooltipPosition == 'right' }" class="w-1.5 h-1.5 transform bg-black bg-opacity-90"></div>
+            </div>
+        </div>
+    </div>
+    <div x-ref="content" class="flex gap-2 justify-between items-center">
+        <p class="text-gray-700 font-semibold">Custo Estimado:</p>
+        <div class="h-8 w-32 bg-blue-50 rounded-lg animate-pulse"></div>
+    </div>
+</div>
+                </div>
+                <button type="submit" class="bg-green-600 text-white px-8 py-3 rounded-xl hover:bg-green-700 transition-colors flex items-center text-lg">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                    </svg>
+                    Iniciar Análise
+                </button>
+            </div>
+        {% else %}
+            <!-- Elementos Inferiores -->
+            <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-4 px-6 flex justify-between shadow-lg">
+                <div class="flex items-center space-x-4 cursor-pointer">
+                    <p class="text-gray-700 font-semibold">Custo Estimado:</p>
+                    <!-- Elementos Inferiores -->
+            <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-4 px-6 flex justify-between shadow-lg">
+                <div class="flex items-center space-x-4 cursor-pointer">
+                    <div 
+    x-data="{
+        tooltipVisible: false,
+        tooltipText: 'Usando {{ model_name }}',
+        tooltipArrow: true,
+        tooltipPosition: 'top',
+    }"
+    x-init="$refs.content.addEventListener('mouseenter', () => { tooltipVisible = true; }); $refs.content.addEventListener('mouseleave', () => { tooltipVisible = false; });"
+    class="relative">
+    
+    <div x-ref="tooltip" x-show="tooltipVisible" :class="{ 'top-0 left-1/2 -translate-x-1/2 -mt-0.5 -translate-y-full' : tooltipPosition == 'top', 'top-1/2 -translate-y-1/2 -ml-0.5 left-0 -translate-x-full' : tooltipPosition == 'left', 'bottom-0 left-1/2 -translate-x-1/2 -mb-0.5 translate-y-full' : tooltipPosition == 'bottom', 'top-1/2 -translate-y-1/2 -mr-0.5 right-0 translate-x-full' : tooltipPosition == 'right' }" class="absolute w-auto text-sm" x-cloak>
+        <div x-show="tooltipVisible" x-transition class="relative px-2 py-1 text-white bg-black rounded bg-opacity-90">
+            <p x-text="tooltipText" class="flex-shrink-0 block text-xs whitespace-nowrap"></p>
+            <div x-ref="tooltipArrow" x-show="tooltipArrow" :class="{ 'bottom-0 -translate-x-1/2 left-1/2 w-2.5 translate-y-full' : tooltipPosition == 'top', 'right-0 -translate-y-1/2 top-1/2 h-2.5 -mt-px translate-x-full' : tooltipPosition == 'left', 'top-0 -translate-x-1/2 left-1/2 w-2.5 -translate-y-full' : tooltipPosition == 'bottom', 'left-0 -translate-y-1/2 top-1/2 h-2.5 -mt-px -translate-x-full' : tooltipPosition == 'right' }" class="absolute inline-flex items-center justify-center overflow-hidden">
+                <div :class="{ 'origin-top-left -rotate-45' : tooltipPosition == 'top', 'origin-top-left rotate-45' : tooltipPosition == 'left', 'origin-bottom-left rotate-45' : tooltipPosition == 'bottom', 'origin-top-right -rotate-45' : tooltipPosition == 'right' }" class="w-1.5 h-1.5 transform bg-black bg-opacity-90"></div>
+            </div>
+        </div>
+    </div>
+    <div x-ref="content" class="flex gap-2 justify-center items-center">
+        <p class="text-gray-700 font-semibold">Custo Estimado:</p>
+        <div class="h-8 w-32 bg-blue-50 rounded-lg animate-pulse flex justify-center items-center">
+            {{ token_usage }} tokens
+        </div>
+    </div>
+</div>
+                </div>
+                <input type="text" name="ai_response" value="{{ ai_response }}" hidden>
+                <button type="submit" class="bg-green-600 text-white px-8 py-3 rounded-xl hover:bg-green-700 transition-colors flex items-center text-lg">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                    </svg>
+                    Baixar Relatório
+                </button>
+            </div>
+        {% endif %}
+
+        
+
+    </main>
+    </form>
+
+    <script>
+        document.getElementById('videoInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInfo = document.getElementById('fileInfo');
+            
+            if(file) {
+                uploadArea.classList.add('hidden');
+                fileInfo.classList.remove('hidden');
+                
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('fileSize').textContent = formatFileSize(file.size);
+                document.getElementById('fileType').textContent = file.type.split('/')[1].toUpperCase();
+            }
+        });
+    
+        function formatFileSize(bytes) {
+            if(bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i]);
+        }
+    
+        function clearFile() {
+            document.getElementById('videoInput').value = '';
+            document.getElementById('uploadArea').classList.remove('hidden');
+            document.getElementById('fileInfo').classList.add('hidden');
+            document.getElementById('fileName').textContent = '-';
+            document.getElementById('fileSize').textContent = '-';
+            document.getElementById('fileType').textContent = '-';
+        }
+    </script>
+
+</body>
+</html>
